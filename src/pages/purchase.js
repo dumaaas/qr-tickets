@@ -43,7 +43,7 @@ export default function Purchase() {
 
               <p className="font-semibold text-black">5:00PM - 12:00PM</p>
             </div>
-            <div className="flex items-center justify-between py-4 border-b">
+            <div className="flex items-center justify-between pt-4 pb-2">
               <p className="font-semibold text-black">Quantity</p>
 
               <div className="flex gap-[10px] items-center">
@@ -55,20 +55,6 @@ export default function Purchase() {
                   +
                 </p>
               </div>
-            </div>
-            <div className="flex items-center justify-between pt-4 pb-2">
-              <p className="font-semibold text-black">Total</p>
-
-              <p className="font-semibold text-black">20$</p>
-            </div>
-            <div className="flex items-end justify-end w-full">
-              <Link
-                href={"/tickets/123"}
-                className="group relative overflow-hidden rounded-[20px] px-4 py-2 mt-[30px] bg-gradient-to-r from-blue-600 to-purple-800 font-semibold ml-auto xl:mx-0 inline-flex"
-              >
-                <p className="relative z-30 group-hover:underline"> Purchase</p>
-                <div className="overflow-hidden absolute left-0 top-0 rounded-[20px] bg-black group-hover:w-full h-full  bg-gradient-to-r from-purple-800 to-blue-600 w-0 transition-all duration-200 ease-in-out"></div>
-              </Link>
             </div>
           </div>
         ) : null}
@@ -90,7 +76,7 @@ export default function Purchase() {
 
               <p className="font-semibold text-black">5:00PM - 12:00PM</p>
             </div>
-            <div className="flex items-center justify-between py-4 border-b">
+            <div className="flex items-center justify-between pt-4 pb-2 ">
               <p className="font-semibold text-black">Quantity</p>
 
               <div className="flex gap-[10px] items-center">
@@ -103,22 +89,40 @@ export default function Purchase() {
                 </p>
               </div>
             </div>
-            <div className="flex items-center justify-between pt-4 pb-2">
-              <p className="font-semibold text-black">Total</p>
-
-              <p className="font-semibold text-black">20$</p>
-            </div>
-            <div className="flex items-end justify-end w-full">
-              <Link
-                href={"/purchase"}
-                className="group relative overflow-hidden rounded-[20px] px-4 py-2 mt-[30px] bg-gradient-to-r from-blue-600 to-purple-800 font-semibold ml-auto xl:mx-0 inline-flex"
-              >
-                <p className="relative z-30 group-hover:underline"> Purchase</p>
-                <div className="overflow-hidden absolute left-0 top-0 rounded-[20px] bg-black group-hover:w-full h-full  bg-gradient-to-r from-purple-800 to-blue-600 w-0 transition-all duration-200 ease-in-out"></div>
-              </Link>
-            </div>
           </div>
         ) : null}
+      </div>
+      <div className="w-[89%] bg-white rounded-[20px]">
+        <h3 className="px-4 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-800 rounded-tr-[20px] rounded-tl-[20px]">Your cart</h3>
+        <div className="px-4">
+          <div className="flex items-center justify-between py-4">
+            <p className="text-black ">Festival ticket x2</p>
+
+            <p className="font-semibold text-black">40$</p>
+          </div>
+          <div className="flex items-center justify-between py-4 border-b">
+            <p className="text-black ">Parking ticket x3</p>
+
+            <p className="font-semibold text-black">45$</p>
+          </div>
+        </div>
+        <div className="flex items-center justify-between px-4 py-4 border-b">
+          <p className="text-black ">Total</p>
+
+          <p className="font-semibold text-black">95$</p>
+        </div>
+        <div className="flex items-center justify-between px-4 py-4">
+          <p className="text-black ">Proced to the checkout</p>
+          <div className="flex">
+            <Link
+              href={"/tickets/123"}
+              className="group relative overflow-hidden rounded-[20px] px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-800 font-semibold ml-auto xl:mx-0 inline-flex"
+            >
+              <p className="relative z-30 group-hover:underline"> Purchase</p>
+              <div className="overflow-hidden absolute left-0 top-0 rounded-[20px] bg-black group-hover:w-full h-full  bg-gradient-to-r from-purple-800 to-blue-600 w-0 transition-all duration-200 ease-in-out"></div>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
