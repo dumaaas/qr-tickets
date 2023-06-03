@@ -130,7 +130,7 @@ export default function Purchase() {
             <div className="flex items-center justify-between py-4 border-b">
               <p className="text-black ">Parking ticket x3</p>
 
-              <p className="font-semibold text-black">45$</p>
+              <p className="font-semibold text-black">55$</p>
             </div>
           ) : null}
         </div>
