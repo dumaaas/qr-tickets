@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="fixed top-0 w-full bg-gradient-to-r from-black via-blue-900 to-blue-600">
+    <header className="fixed z-[100000] top-0 w-full bg-gradient-to-r from-black via-blue-900 to-blue-600">
       <div className="container flex items-center justify-between px-5 py-5 mx-auto">
         <Link
           href={"/"}

@@ -22,11 +22,11 @@ export default function Purchase() {
   };
 
   return (
-    <div className="container px-5 pt-[180px] pb-12 mx-auto  gap-[80px] min-h-screen flex flex-col items-center justify-center">
+    <div className="container px-5 pt-[180px] pb-12 mx-auto md:gap-[60px] gap-[40px]  lg:gap-[80px] min-h-screen flex flex-col items-center justify-center">
       <h1 className="text-4xl font-bold">Purchase your ticket </h1>
-      <div className="flex items-center justify-evenly w-full gap-[40px]">
+      <div className="flex items-center justify-evenly w-full gap-[40px] lg:flex-row flex-col">
         {router.query.type !== "2" ? (
-          <div className="bg-white rounded-[12px] px-4 py-4 w-[40%]">
+          <div className="bg-white rounded-[12px] px-4 py-4 lg:w-[40%] w-full">
             <div className="flex items-center justify-between pb-4 border-b">
               <Image
                 className="relative fill-black"
@@ -59,7 +59,7 @@ export default function Purchase() {
           </div>
         ) : null}
         {router.query.type !== "1" ? (
-          <div className="bg-white rounded-[12px] px-4 py-4 w-[40%]">
+          <div className="bg-white rounded-[12px] px-4 py-4 lg:w-[40%] w-full">
             <div className="flex items-center justify-between pb-4 border-b">
               <Image
                 className="relative fill-black"
@@ -92,19 +92,25 @@ export default function Purchase() {
           </div>
         ) : null}
       </div>
-      <div className="w-[89%] bg-white rounded-[20px]">
-        <h3 className="px-4 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-800 rounded-tr-[20px] rounded-tl-[20px]">Your cart</h3>
+      <div className="lg:w-[89%] w-full bg-white rounded-[20px]">
+        <h3 className="px-4 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-purple-800 rounded-tr-[20px] rounded-tl-[20px]">
+          Your cart
+        </h3>
         <div className="px-4">
-          <div className="flex items-center justify-between py-4">
-            <p className="text-black ">Festival ticket x2</p>
+          {router.query.type !== "2" ? (
+            <div className={`flex items-center justify-between py-4 ${router.query.type == '1' ? 'border-b' : ''}`}>
+              <p className="text-black ">Festival ticket x2</p>
 
-            <p className="font-semibold text-black">40$</p>
-          </div>
-          <div className="flex items-center justify-between py-4 border-b">
-            <p className="text-black ">Parking ticket x3</p>
+              <p className="font-semibold text-black">40$</p>
+            </div>
+          ) : null}
+          {router.query.type !== "1" ? (
+            <div className="flex items-center justify-between py-4 border-b">
+              <p className="text-black ">Parking ticket x3</p>
 
-            <p className="font-semibold text-black">45$</p>
-          </div>
+              <p className="font-semibold text-black">45$</p>
+            </div>
+          ) : null}
         </div>
         <div className="flex items-center justify-between px-4 py-4 border-b">
           <p className="text-black ">Total</p>
