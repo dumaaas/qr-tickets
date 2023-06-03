@@ -17,11 +17,26 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: white;
   background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 15px;
+}
+
+*::-webkit-scrollbar-track {
+  @apply bg-blue-600;
+}
+
+*::-webkit-scrollbar-thumb {
+  @apply bg-gradient-to-t from-blue-600 via-purple-800 to-blue-600;
+
+  border-radius: 14px;
 }

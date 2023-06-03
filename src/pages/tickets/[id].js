@@ -16,7 +16,7 @@ function Tickets() {
     QRCode.toDataURL("http://localhost:3001/tickets/1234").then(setSrc);
   }, []);
   return (
-    <div className="container px-5 pt-[180px] pb-12 mx-auto  gap-[40px] h-screen flex flex-col items-center justify-center">
+    <div className="container px-5 pt-[180px] pb-12 mx-auto  gap-[40px] min-h-screen flex flex-col items-center justify-center">
       <div className="flex items-center gap-[20px]">
         <h1>
           Ticket status:{" "}
@@ -25,7 +25,7 @@ function Tickets() {
           </span>
         </h1>
         <div className="flex items-center gap-[8px] rounded-[20px] border-green-500 text-green-600 bg-green-200 border px-3 py-1">
-          <p>Approve</p>
+          <p className="text-green-600">Approve</p>
           <span>✅</span>
         </div>
       </div>
