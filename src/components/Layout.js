@@ -9,16 +9,14 @@ export const metadata = {
 
 export default function Layout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={
-          inter.className +
-          "min-h-screen bg-gradient-to-r from-black via-blue-900 to-blue-600"
-        }
-      >
-        <Header />
-        {children}
-      </body>
-    </html>
+    <div
+      className={
+        inter.className +
+        "min-h-screen bg-gradient-to-r from-black via-blue-900 to-blue-600"
+      }
+    >
+      <Header />
+      {children}
+    </div>
   );
 }
