@@ -3,23 +3,36 @@
 import Link from "next/link";
 import Image from "next/image";
 import QRCode from "qrcode";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+const stripePromise = loadStripe(process.env.stripe_public_key)
+import axios from "axios";
 export default function Purchase() {
   const [src, setSrc] = useState("");
   const router = useRouter();
   const { query } = router.query;
-  console.log(query, "hej");
+  const [publishableKey, setPublishableKey] = useState("");
 
-  console.log(router, "router");
-  const generate = (e) => {
-    e.preventDefault();
-    console.log("???");
-    QRCode.toDataURL(
-      "https://myqrcode.com/generator/url?preview=template"
-    ).then(setSrc);
-  };
+  useEffect(() => {
+    QRCode.toDataURL("http://localhost:3000/tickets/1234").then(setSrc);
+  }, []);
+
+  const createCheckoutSession = async () => {
+    const stripe = await stripePromise;
+
+    // Call the backend to create a checkout session...
+    const checkoutSession = await axios.post('/api/create-checkout-session', {
+      items: [{name: 'Festival Ticket', price: 20, quantity: 1}, {name: 'Parking Ticket', price: 20, quantity: 2}],
+    })
+
+    // Redirect user/customer to Stripe Checkout
+    const result = await stripe.redirectToCheckout({
+      sessionId: checkoutSession.data.id
+    })
+  }
+
 
   return (
     <div className="container px-5 pt-[180px] pb-12 mx-auto md:gap-[60px] gap-[40px]  lg:gap-[80px] min-h-screen flex flex-col items-center justify-center">
@@ -27,12 +40,10 @@ export default function Purchase() {
       <div className="flex items-center justify-evenly w-full gap-[40px] lg:flex-row flex-col">
         {router.query.type !== "2" ? (
           <div
-          className={`bg-white rounded-[12px] px-4 py-4 lg:w-[40%] w-full ${
-            router.query.type == "1"
-              ? "lg:w-[60%]"
-              : "lg:w-[40%]"
-          }`}
-        >
+            className={`bg-white rounded-[12px] px-4 py-4 lg:w-[40%] w-full ${
+              router.query.type == "1" ? "lg:w-[60%]" : "lg:w-[40%]"
+            }`}
+          >
             <div className="flex items-center justify-between pb-4 border-b">
               <Image
                 className="relative fill-black"
@@ -67,9 +78,7 @@ export default function Purchase() {
         {router.query.type !== "1" ? (
           <div
             className={`bg-white rounded-[12px] px-4 py-4 lg:w-[40%] w-full ${
-              router.query.type == "2"
-                ? "lg:w-[60%]"
-                : "lg:w-[40%]"
+              router.query.type == "2" ? "lg:w-[60%]" : "lg:w-[40%]"
             }`}
           >
             <div className="flex items-center justify-between pb-4 border-b">
@@ -142,13 +151,12 @@ export default function Purchase() {
         <div className="flex items-center justify-between px-4 py-4">
           <p className="text-black ">Proced to the checkout</p>
           <div className="flex">
-            <Link
-              href={"/tickets/123"}
+            <div
               className="group relative overflow-hidden rounded-[20px] px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-800 font-semibold ml-auto xl:mx-0 inline-flex"
             >
-              <p className="relative z-30 group-hover:underline"> Purchase</p>
+              <button onClick={() => createCheckoutSession()} role="link" className="relative z-30 group-hover:underline"> Purchase</button>
               <div className="overflow-hidden absolute left-0 top-0 rounded-[20px] bg-black group-hover:w-full h-full  bg-gradient-to-r from-purple-800 to-blue-600 w-0 transition-all duration-200 ease-in-out"></div>
-            </Link>
+            </div>
           </div>
         </div>
       </div>
