@@ -16,8 +16,9 @@ export default async (req, res) => {
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
-    success_url: `http://localhost:3000/purchase?sessionId={CHECKOUT_SESSION_ID}`,
-    cancel_url: "http://localhost:3000/purchase",
+    // success_url: `${process.env.WEB_URL}/purchase?sessionId={CHECKOUT_SESSION_ID}`,
+    success_url: `${process.env.WEB_URL}/tickets/123`,
+    cancel_url: `${process.env.WEB_URL}/purchase`,
     line_items: transformedItems,
     mode: "payment",
     metadata: {
