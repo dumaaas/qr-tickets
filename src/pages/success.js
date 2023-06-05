@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import QRCode from "qrcode";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import Image from "next/image";
 function Success() {
   const router = useRouter();
@@ -16,66 +17,26 @@ function Success() {
     QRCode.toDataURL("http://localhost:3001/tickets/1234").then(setSrc);
   }, []);
   return (
-    <div className="container px-5 pt-[180px] pb-12 mx-auto  gap-[40px] min-h-screen flex flex-col items-center justify-center">
+    <div className="container px-5 pt-[180px] pb-12 mx-auto  gap-[30px] min-h-screen flex flex-col items-center justify-center">
       <div className="flex items-center gap-[20px] justify-center">
         <span className="text-[40px]">✅</span>
-        <h1 className="text-[22px]">Thank you, you have successfully purchased the ticket!</h1>
+        <h1 className="text-[22px]">
+          Thank you, you have successfully purchased the ticket!
+        </h1>
       </div>
       <div>
-        <p>
-          Check your email, your tickets are there!
+        <p>Check your email, your tickets are there!</p>
+      </div>
+      <Link
+        href={"/purchase"}
+        className="group relative overflow-hidden rounded-[20px] px-4 py-2 mt-[30px] bg-gradient-to-r from-blue-600 to-purple-800 font-semibold mx-auto xl:mx-0 table"
+      >
+        <p className="relative z-30 group-hover:underline">
+          {" "}
+          Continue purchase
         </p>
-      </div>
-      <div className="relative w-[92%] h-auto bg-white rounded-[20px]">
-        <div className="rounded-tl-[20px] rounded-tr-[20px] flex items-center justify-between px-4 py-2 mx-auto bg-blue-500">
-          <Image
-            className="relative"
-            src="/logo.png"
-            alt="logo"
-            width={130}
-            height={60}
-            priority
-          />
-          <p className="text-lg font-bold text-right">Harmony Festival</p>
-        </div>
-        <div className="p-6">
-          <div className=" flex items-center justify-between border-b pb-[10px] ">
-            <div className="flex flex-col">
-              <label className="text-sm text-gray-400">Location</label>
-              <p className="text-black">Chicago, USA</p>
-            </div>
-            <div className="flex flex-col text-right">
-              <label className="text-sm text-gray-400">Date</label>
-              <p className="text-black">23-05-2023</p>
-            </div>
-          </div>
-          <div className="mt-[10px] flex items-center justify-between border-b pb-[10px] ">
-            <div className="flex flex-col">
-              <label className="text-sm text-gray-400">Type</label>
-              <p className="text-black">Group ticket</p>
-            </div>
-            <div className="flex flex-col text-right">
-              <label className="text-sm text-gray-400">Price</label>
-              <p className="text-black">20$</p>
-            </div>
-          </div>
-          <div className="pt-[10px] flex items-center justify-between ">
-            <div className="flex flex-col">
-              <label className="text-sm text-gray-400">Customer</label>
-              <p className="text-black">Marko Dumnic</p>
-            </div>
-            <div className="flex flex-col text-right">
-              <label className="text-sm text-gray-400">Ordered on</label>
-              <p className="text-black">05-13-2023</p>
-            </div>
-          </div>
-          <img className="mx-auto mt-[20px]" src={src} />
-        </div>
-
-        <div className="bg-blue-500 w-full min-h-[25px] rounded-bl-[20px] rounded-br-[20px] text-xs py-2 px-4 flex items-center">
-          Important: Do not scan QR Code until the concert starts!
-        </div>
-      </div>
+        <div className="overflow-hidden absolute left-0 top-0 rounded-[20px] bg-black group-hover:w-full h-full  bg-gradient-to-r from-purple-800 to-blue-600 w-0 transition-all duration-200 ease-in-out"></div>
+      </Link>
     </div>
   );
 }

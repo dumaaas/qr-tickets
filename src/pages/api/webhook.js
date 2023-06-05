@@ -1,5 +1,6 @@
 import { buffer } from "micro";
 import * as admin from "firebase-admin";
+import { type } from "os";
 const QRCode = require("qrcode");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
@@ -18,18 +19,81 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const endpointSecret = process.env.WEBHOOK_SECRET;
 
+function createPurchase(item, email, name) {
+  const collectionRef = admin.firestore().collection("tickets");
+
+  for (var i = 0; i < item.quantity; i++) {
+    var purchaseData = {};
+
+    purchaseData.name = name;
+    purchaseData.email = email;
+    purchaseData.ticketType = item.name;
+    purchaseData.quantity = item.quantity;
+    purchaseData.price = item.price;
+    purchaseData.orderedOn = admin.firestore.FieldValue.serverTimestamp();
+    purchaseData.counter = 0;
+    purchaseData.status = "Pending";
+
+    const newDocRef = collectionRef
+      .add(purchaseData)
+      .then((docRef) => {
+        generatePDFWithQRCode(docRef.id, email, name, item);
+      })
+      .catch((error) => {
+        console.error("Greška prilikom kreiranja dokumenta:", error);
+      });
+  }
+}
+
 // Funkcija za izvoz QR koda kao PDF
-async function generatePDFWithQRCode(email) {
+async function generatePDFWithQRCode(id, email, name, item) {
   try {
     // Generisanje QR koda
-    const qrCodeData = await generateQRCode(email);
+    const qrCodeData = await generateQRCode(id);
 
     // Generisanje PDF-a
-    const doc = new PDFDocument();
-    doc.text("Hello, World!"); // Primer sadržaja PDF-a
+    const doc = new PDFDocument({ size: "letter", layout: "landscape" });
+
+    doc.rect(0, 0, doc.page.width, doc.page.height).fill("#2353C4");
+
+    doc.fontSize(22).fillColor("white");
+
+    let logoWidth = 250;
+    doc.image("public/logo.png", doc.page.width / 2 - logoWidth / 2, doc.y, {
+      width: logoWidth,
+      height: 115,
+    });
+
+    doc.moveDown();
+    doc.moveDown();
+
+    doc.text(`Harmony Festival Ticket`, { align: "center" }); // Primer sadržaja PDF-a
+    doc.moveDown();
+
+    doc.fontSize(14);
+    doc.text("Customer:", { align: "left", continued: true });
+    doc.text(name, { align: "right" });
+    doc.text("Email:", { align: "left", continued: true });
+    doc.text(email, { align: "right" });
+    doc.text("Ticket type:", { align: "left", continued: true });
+    doc.text(item.name, { align: "right" });
+    doc.text("Price:", { align: "left", continued: true });
+    doc.text(`${item.price}$`, { align: "right" });
+    doc.text("Order date:", { align: "left", continued: true });
+    doc.text(Date.now(), { align: "right" });
+
+    doc.moveDown();
+    doc.moveDown();
 
     // Dodavanje QR koda u PDF
-    doc.image(qrCodeData, { width: 200, height: 200 });
+    doc.image(qrCodeData, doc.page.width / 2 - 120 / 2, doc.y, {
+      width: 120,
+      height: 120,
+    });
+
+    doc.fontSize(8);
+    // doc.y += 5;
+    doc.text(`Do not scan this QR code.`, { align: "center" }); // Primer sadržaja PDF-a
 
     const chunks = [];
     doc.on("data", (chunk) => {
@@ -47,13 +111,13 @@ async function generatePDFWithQRCode(email) {
   }
 }
 // Funkcija za generisanje QR koda
-function generateQRCode(text) {
+function generateQRCode(id) {
   return new Promise((resolve, reject) => {
-    QRCode.toBuffer(text, (err, buffer) => {
+    QRCode.toDataURL(`${process.env.WEB_URL}/tickets/${id}`, (err, dataURL) => {
       if (err) {
         reject(err);
       } else {
-        resolve(buffer);
+        resolve(dataURL);
       }
     });
   });
@@ -110,17 +174,6 @@ const fulfillOrder = async (session) => {
     })
     .then(() => {
       console.log(`SUCESS: Order ${session.id} has been added to the DB`);
-      // const dataToEncode = "https://www.example.com";
-      // const outputFilePath = "qr_code.pdf";
-
-      // generateQRCode(dataToEncode)
-      //   .then((qrCodeData) => {
-      //     exportAsPDF(qrCodeData, outputFilePath);
-      //     console.log("QR code exported as PDF:", outputFilePath);
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error generating QR code:", error);
-      //   });
     });
 };
 
@@ -148,9 +201,12 @@ export default async (req, res) => {
       // Fulfill the order
       return fulfillOrder(session)
         .then(() => {
-          const email = "markodumnic8@gmail.com"; // Email primaoca
-          metadataItems.forEach((element) => {
-            generatePDFWithQRCode(email);
+          metadataItems.forEach((el) => {
+            createPurchase(
+              el,
+              session.customer_details.email,
+              session.customer_details.name
+            );
           });
           res.status(200);
         })
