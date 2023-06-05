@@ -59,10 +59,10 @@ async function generatePDFWithQRCode(id, email, name, item) {
     doc.fontSize(22).fillColor("white");
 
     let logoWidth = 250;
-    // doc.image("public/logo.png", doc.page.width / 2 - logoWidth / 2, doc.y, {
-    //   width: logoWidth,
-    //   height: 115,
-    // });
+    doc.image("public/logo.png", doc.page.width / 2 - logoWidth / 2, doc.y, {
+      width: logoWidth,
+      height: 115,
+    });
 
     doc.moveDown();
     doc.moveDown();
