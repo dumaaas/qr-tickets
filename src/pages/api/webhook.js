@@ -59,10 +59,10 @@ async function generatePDFWithQRCode(id, email, name, item) {
     doc.fontSize(22).fillColor("white");
 
     let logoWidth = 250;
-    doc.image("public/logo.png", doc.page.width / 2 - logoWidth / 2, doc.y, {
-      width: logoWidth,
-      height: 115,
-    });
+    // doc.image("public/logo.png", doc.page.width / 2 - logoWidth / 2, doc.y, {
+    //   width: logoWidth,
+    //   height: 115,
+    // });
 
     doc.moveDown();
     doc.moveDown();
@@ -202,13 +202,13 @@ export default async (req, res) => {
       return fulfillOrder(session)
         .then(() => {
           res.status(200);
-          // metadataItems.forEach((el) => {
-          //   createPurchase(
-          //     el,
-          //     session.customer_details.email,
-          //     session.customer_details.name
-          //   );
-          // });
+          metadataItems.forEach((el) => {
+            createPurchase(
+              el,
+              session.customer_details.email,
+              session.customer_details.name
+            );
+          });
         })
         .catch((err) => res.status(400).send(`Webhook Error: ${err.message}`));
     }
