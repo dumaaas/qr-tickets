@@ -58,10 +58,10 @@ async function generatePDFWithQRCode(id, email, name, item) {
 
     doc.fontSize(22).fillColor("white");
 
-    let logoWidth = 250;
+    let logoWidth = 100;
     doc.image("public/logo.png", doc.page.width / 2 - logoWidth / 2, doc.y, {
       width: logoWidth,
-      height: 115,
+      height: 50,
     });
 
     doc.moveDown();
@@ -197,7 +197,6 @@ export default async (req, res) => {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
       const metadataItems = JSON.parse(session.metadata.purchase);
-      res.status(200);
       // Fulfill the order
       return fulfillOrder(session)
         .then(() => {
@@ -208,6 +207,7 @@ export default async (req, res) => {
               session.customer_details.name
             );
           });
+          res.status(200);
         })
         .catch((err) => res.status(400).send(`Webhook Error: ${err.message}`));
     }
