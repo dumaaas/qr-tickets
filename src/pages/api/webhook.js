@@ -113,7 +113,7 @@ async function generatePDFWithQRCode(id, email, name, item) {
 // Funkcija za generisanje QR koda
 function generateQRCode(id) {
   return new Promise((resolve, reject) => {
-    QRCode.toDataURL(`${process.env.WEB_URL}/tickets/${id}`, (err, dataURL) => {
+    QRCode.toDataURL(`https://facebook.com/`, (err, dataURL) => {
       if (err) {
         reject(err);
       } else {
@@ -207,6 +207,7 @@ export default async (req, res) => {
               session.customer_details.name
             );
           });
+          console.time();
           res.status(200);
         })
         .catch((err) => res.status(400).send(`Webhook Error: ${err.message}`));
