@@ -201,6 +201,7 @@ export default async (req, res) => {
       // Fulfill the order
       return fulfillOrder(session)
         .then(() => {
+          res.status(200);
           metadataItems.forEach((el) => {
             createPurchase(
               el,
@@ -208,7 +209,6 @@ export default async (req, res) => {
               session.customer_details.name
             );
           });
-          res.status(200);
         })
         .catch((err) => res.status(400).send(`Webhook Error: ${err.message}`));
     }
