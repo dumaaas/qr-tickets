@@ -197,11 +197,10 @@ export default async (req, res) => {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
       const metadataItems = JSON.parse(session.metadata.purchase);
-
+      res.status(200);
       // Fulfill the order
       return fulfillOrder(session)
         .then(() => {
-          res.status(200);
           metadataItems.forEach((el) => {
             createPurchase(
               el,
