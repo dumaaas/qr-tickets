@@ -137,13 +137,13 @@ async function sendEmailWithAttachment(email, pdfData) {
 
     // Definisanje opcija za email
     const mailOptions = {
-      from: "markodumnic8@gmail.com",
+      from: "markegingteam@harmonyfestival.org",
       to: email,
-      subject: "PDF Attachment",
-      text: "Please find attached the PDF document.",
+      subject: "Tickets for Harmony Festival",
+      text: "In attached files you can find your tickets. Saved them until the festival.",
       attachments: [
         {
-          filename: "example.pdf",
+          filename: "ticket.pdf",
           content: pdfData,
         },
       ],
