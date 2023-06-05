@@ -58,14 +58,14 @@ async function generatePDFWithQRCode(id, email, name, item) {
 
     doc.fontSize(28).fillColor("white");
 
-    let logoWidth = 250;
-    doc.image("public/logo.png", doc.page.width / 2 - logoWidth / 2, doc.y, {
-      width: logoWidth,
-      height: 115,
-    });
+    // let logoWidth = 250;
+    // doc.image("public/logo.png", doc.page.width / 2 - logoWidth / 2, doc.y, {
+    //   width: logoWidth,
+    //   height: 115,
+    // });
 
-    doc.moveDown();
-    doc.moveDown();
+    // doc.moveDown();
+    // doc.moveDown();
 
     doc.text(`Harmony Festival Ticket`, { align: "center" }); // Primer sadržaja PDF-a
     doc.moveDown();
