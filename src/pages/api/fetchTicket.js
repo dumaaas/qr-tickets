@@ -22,9 +22,9 @@ export default async (req, res) => {
       const data = doc.data();
       res.status(200).json(data); // Vraćanje podatka kao odgovor na zahtjev
     } else {
-      res.status(404).json({ error: "Dokument ne postoji." });
+      res.status(404);
     }
   } catch (error) {
-    res.status(500).json({ error: "Greška prilikom dohvatanja podataka." });
+    res.status(500);
   }
 };
