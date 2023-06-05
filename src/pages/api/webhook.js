@@ -202,13 +202,13 @@ export default async (req, res) => {
       return fulfillOrder(session)
         .then(() => {
           res.status(200);
-          metadataItems.forEach((el) => {
-            createPurchase(
-              el,
-              session.customer_details.email,
-              session.customer_details.name
-            );
-          });
+          // metadataItems.forEach((el) => {
+          //   createPurchase(
+          //     el,
+          //     session.customer_details.email,
+          //     session.customer_details.name
+          //   );
+          // });
         })
         .catch((err) => res.status(400).send(`Webhook Error: ${err.message}`));
     }
