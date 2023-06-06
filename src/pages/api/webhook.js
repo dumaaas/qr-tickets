@@ -22,6 +22,19 @@ const endpointSecret = process.env.WEBHOOK_SECRET;
 function createPurchase(item, email, name) {
   const collectionRef = admin.firestore().collection("tickets");
 
+  const currentTime = Date.now();
+  const dateObject = new Date(currentTime);
+  const options = {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  };
+  const dateString = dateObject.toLocaleDateString("en-US", options);
+
   for (var i = 0; i < item.quantity; i++) {
     var purchaseData = {};
 
@@ -30,7 +43,7 @@ function createPurchase(item, email, name) {
     purchaseData.ticketType = item.name;
     purchaseData.quantity = item.quantity;
     purchaseData.price = item.price;
-    purchaseData.orderedOn = admin.firestore.FieldValue.serverTimestamp();
+    purchaseData.orderedOn = dateString;
     purchaseData.counter = 0;
     purchaseData.status = "Pending";
 
@@ -68,20 +81,50 @@ async function generatePDFWithQRCode(id, email, name, item) {
     // doc.moveDown();
 
     doc.text(`Harmony Festival Ticket`, { align: "center" }); // Primer sadržaja PDF-a
+    doc.fontSize(22).fillColor("white");
+
+    doc.text(`Sunday, 9th July 2023, 9:00 PM`, { align: "center" }); // Primer sadržaja PDF-a
+
+    doc.moveDown();
     doc.moveDown();
 
     doc.fontSize(14);
     doc.text("Customer:", { align: "left", continued: true });
     doc.text(name, { align: "right" });
+    doc.moveDown();
+
     doc.text("Email:", { align: "left", continued: true });
     doc.text(email, { align: "right" });
+    doc.moveDown();
+
     doc.text("Ticket type:", { align: "left", continued: true });
     doc.text(item.name, { align: "right" });
+    doc.moveDown();
+
     doc.text("Price:", { align: "left", continued: true });
     doc.text(`${item.price}$`, { align: "right" });
-    doc.text("Order date:", { align: "left", continued: true });
-    doc.text(Date.now(), { align: "right" });
+    doc.moveDown();
 
+    const currentTime = Date.now();
+    const dateObject = new Date(currentTime);
+    const options = {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+    const dateString = dateObject.toLocaleDateString("en-US", options);
+
+    doc.text("Order date:", { align: "left", continued: true });
+    doc.text(dateString, { align: "right" });
+
+    doc.moveDown();
+    doc.text("Web ticket:", { align: "left", continued: true });
+    doc.text(`${process.env.WEB_URL}/checkTicket/${id}`, { align: "right" });
+    doc.moveDown();
     doc.moveDown();
     doc.moveDown();
 
@@ -207,7 +250,6 @@ export default async (req, res) => {
               session.customer_details.name
             );
           });
-          console.time();
           res.status(200);
         })
         .catch((err) => res.status(400).send(`Webhook Error: ${err.message}`));
