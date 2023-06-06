@@ -113,7 +113,7 @@ async function generatePDFWithQRCode(id, email, name, item) {
 // Funkcija za generisanje QR koda
 function generateQRCode(id) {
   return new Promise((resolve, reject) => {
-    QRCode.toDataURL(`https://qr-tickets-jade.vercel.app/tickets/GCFMJwckyPFFtvGG1fT0`, (err, dataURL) => {
+    QRCode.toDataURL(`${process.env.WEB_URL}/tickets/${id}`, (err, dataURL) => {
       if (err) {
         reject(err);
       } else {
